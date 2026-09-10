@@ -1,5 +1,7 @@
 # Workflow Tracker
 
+[![CI](https://github.com/frankfulcomer/workflow-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/frankfulcomer/workflow-tracker/actions/workflows/ci.yml)
+
 A small, self-contained web app for tracking work items through a status
 pipeline (`NEW -> IN_PROGRESS -> RESOLVED -> CLOSED`), built as a **test
 automation demo**: real app, real UI automation suite, real CI pipeline.
