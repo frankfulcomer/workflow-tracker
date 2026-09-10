@@ -6,13 +6,21 @@ const statusFilter = document.getElementById('status-filter');
 
 const STATUSES = ['NEW', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'];
 
+let latestRequestId = 0;
+
 async function fetchItems() {
+    const requestId = ++latestRequestId;
     const params = new URLSearchParams();
     if (statusFilter.value) params.set('status', statusFilter.value);
     if (searchBox.value.trim()) params.set('q', searchBox.value.trim());
 
     const res = await fetch(`/api/items?${params.toString()}`);
     const items = await res.json();
+
+    // Discard this response if a newer fetchItems() call has since been made -
+    // otherwise a slow, now-stale request (e.g. the unfiltered initial load)
+    // can resolve after a subsequent filter/search and clobber its result.
+    if (requestId !== latestRequestId) return;
     renderItems(items);
 }
 
