@@ -81,12 +81,3 @@ Playwright suite against it on every push.
   test pyramid rather than only UI coverage.
 - A `docker-compose.yml` with a real Oracle XE container for full parity.
 - Basic auth / roles if the demo needs to show access-control testing.
-
-## Test automation
-
-A separate, standalone black-box UI test suite for this app lives at:
-https://github.com/frankfulcomer/workflow-tracker-tests
-
-It's written with no dependency on this app's source code - it drives the
-app purely through the browser over HTTP, the same way it would test any
-deployed environment.
