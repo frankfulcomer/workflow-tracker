@@ -86,3 +86,5 @@ rather than waiting to be triggered on its own.
   test pyramid rather than only UI coverage.
 - A `docker-compose.yml` with a real Oracle XE container for full parity.
 - Basic auth / roles if the demo needs to show access-control testing.
+
+<!-- verification commit: trivial change to exercise the cross-repo CI dispatch chain end-to-end -->
