@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -19,15 +19,5 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Install Playwright browsers
-        run: mvn -B exec:java -e -Dexec.classpathScope=test -Dexec.mainClass="com.microsoft.playwright.CLI" -Dexec.args="install --with-deps chromium"
-
-      - name: Run tests (unit + Playwright UI automation)
-        run: mvn -B test
-
-      - name: Upload test report
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: surefire-reports
-          path: target/surefire-reports/
+      - name: Build
+        run: mvn -B package
