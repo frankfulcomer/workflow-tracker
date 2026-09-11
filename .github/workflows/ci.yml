@@ -21,3 +21,20 @@ jobs:
 
       - name: Build
         run: mvn -B package
+
+      # Cross-repo trigger: on a successful push to main, fire a
+      # repository_dispatch event at the sibling workflow-tracker-tests
+      # repo so its regression suite runs against this exact commit, not
+      # whatever main happens to be when someone gets around to it.
+      # Authenticated with DISPATCH_TOKEN, a PAT scoped to least privilege
+      # (Contents: read/write) on just that one target repo - it can't
+      # touch this repo or anything else on the account.
+      - name: Trigger regression suite in workflow-tracker-tests
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          curl -sf -X POST \
+            -H "Authorization: Bearer ${{ secrets.DISPATCH_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/frankfulcomer/workflow-tracker-tests/dispatches \
+            -d '{"event_type":"app-ci-success","client_payload":{"sha":"${{ github.sha }}","ref":"${{ github.ref }}"}}'

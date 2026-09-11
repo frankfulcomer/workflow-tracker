@@ -60,6 +60,11 @@ automation suite itself runs in the companion
 repo's own CI pipeline, which checks out this app, boots it, and runs the
 Playwright suite against it on every push.
 
+On a successful push to `main`, this pipeline also fires a
+`repository_dispatch` event at that companion repo, carrying this
+commit's SHA, so its regression suite runs against this exact revision
+rather than waiting to be triggered on its own.
+
 ## What this is meant to demonstrate
 
 - A real, working app to automate against — not a toy TODO list with no logic.
