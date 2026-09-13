@@ -157,3 +157,4 @@ As a user, I want to create a work item with its initial details so that new wor
 - Consider owner create/edit/delete functionality in a future increment.
 - Standardize table row actions — Update the View and Delete buttons to follow the shared UX conventions and visual language used by other application actions, while preserving appropriate distinction between normal and destructive actions.
 - API error-response cleanup — Invalid status values currently expose an internal Java enum/class name in the API error response. Return a client-facing validation error without exposing implementation details.
+- Create-form submission race condition — A delayed work-item creation response can reset and re-disable the create form even after the user has already started entering a newer item, discarding that in-progress input. The work-item list refresh already guards against an equivalent stale-response hazard; creation does not. Apply the same protection to creation.
