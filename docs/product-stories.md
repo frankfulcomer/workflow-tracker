@@ -134,6 +134,8 @@ As a user, I want to create a work item with its initial details so that new wor
 - **AC-8:** After successful creation, the creation form is reset to its initial state and the Create action becomes disabled again.
 - **AC-9:** If creation fails, the entered form values remain available so that the user does not have to re-enter them.
 - **AC-10:** If creation fails, the user is informed that the work item was not created.
+- **AC-11:** Work-item creation rejects a request with a blank or whitespace-only title and does not create a work item.
+- **AC-12:** Work-item creation rejects a request with an owner identifier that does not correspond to an existing owner, and does not create a work item.
 
 ---
 
@@ -153,3 +155,4 @@ As a user, I want to create a work item with its initial details so that new wor
 - Add pagination with selectable items per page.
 - Consider owner create/edit/delete functionality in a future increment.
 - Standardize table row actions — Update the View and Delete buttons to follow the shared UX conventions and visual language used by other application actions, while preserving appropriate distinction between normal and destructive actions.
+- API error-response cleanup — Invalid status values currently expose an internal Java enum/class name in the API error response. Return a client-facing validation error without exposing implementation details.
