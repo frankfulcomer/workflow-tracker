@@ -6,6 +6,7 @@
     --muted: #6b7280;
     --accent: #2f5fdb;
     --new: #6b7280;
+    --open: #2563eb;
     --in-progress: #b45309;
     --resolved: #15803d;
     --closed: #374151;
@@ -74,6 +75,8 @@ button {
 
 button:hover { opacity: 0.9; }
 
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
 button.secondary {
     background: transparent;
     color: var(--accent);
@@ -114,8 +117,44 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: upp
 }
 
 .badge.NEW { background: var(--new); }
+.badge.OPEN { background: var(--open); }
 .badge.IN_PROGRESS { background: var(--in-progress); }
 .badge.RESOLVED { background: var(--resolved); }
 .badge.CLOSED { background: var(--closed); }
 
 .row-actions { display: flex; gap: 6px; }
+
+.muted { color: var(--muted); font-size: 13px; }
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 16px;
+    overflow-y: auto;
+}
+
+.modal.hidden { display: none; }
+
+.modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+}
+
+.modal-actions {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* Detail view only - the New Item form's description textarea is unaffected. */
+#detail-description {
+    resize: none;
+}

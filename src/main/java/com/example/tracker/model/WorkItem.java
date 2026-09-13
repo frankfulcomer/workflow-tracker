@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "work_items")
@@ -20,8 +22,13 @@ public class WorkItem {
     @Column(length = 2000)
     private String description;
 
-    @Column(length = 100)
-    private String assignee;
+    // EAGER: Owner is a tiny reference table (a handful of rows), and a LAZY
+    // @ManyToOne returns a Hibernate proxy that Jackson cannot serialize directly
+    // (fails on the proxy's own internal fields) - EAGER avoids that entirely
+    // for a relation this cheap to always fetch.
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "owner_id")
+    private Owner owner;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
@@ -32,6 +39,10 @@ public class WorkItem {
 
     @Column(nullable = false)
     private LocalDateTime updatedDate;
+
+    @OneToMany(mappedBy = "workItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("changedAt ASC")
+    private List<StatusHistory> statusHistory = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
@@ -59,12 +70,14 @@ public class WorkItem {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public String getAssignee() { return assignee; }
-    public void setAssignee(String assignee) { this.assignee = assignee; }
+    public Owner getOwner() { return owner; }
+    public void setOwner(Owner owner) { this.owner = owner; }
 
     public Status getStatus() { return status; }
     public void setStatus(Status status) { this.status = status; }
 
     public LocalDateTime getCreatedDate() { return createdDate; }
     public LocalDateTime getUpdatedDate() { return updatedDate; }
+
+    public List<StatusHistory> getStatusHistory() { return statusHistory; }
 }

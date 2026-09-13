@@ -21,8 +21,10 @@
                     <input type="text" id="title" name="title" required maxlength="200">
                 </label>
                 <label>
-                    Assignee
-                    <input type="text" id="assignee" name="assignee" maxlength="100">
+                    Owner
+                    <select id="owner" name="owner">
+                        <option value="">Unassigned</option>
+                    </select>
                 </label>
                 <label>
                     Description
@@ -41,6 +43,7 @@
                     <select id="status-filter">
                         <option value="">All statuses</option>
                         <option value="NEW">New</option>
+                        <option value="OPEN">Open</option>
                         <option value="IN_PROGRESS">In Progress</option>
                         <option value="RESOLVED">Resolved</option>
                         <option value="CLOSED">Closed</option>
@@ -51,7 +54,7 @@
                 <thead>
                     <tr>
                         <th>Title</th>
-                        <th>Assignee</th>
+                        <th>Owner</th>
                         <th>Status</th>
                         <th>Updated</th>
                         <th></th>
@@ -61,6 +64,45 @@
             </table>
         </section>
     </main>
+
+    <div id="item-detail-modal" class="modal hidden" data-testid="item-detail-modal">
+        <div class="modal-content panel">
+            <label>
+                Title
+                <input type="text" id="detail-title" maxlength="200" required>
+            </label>
+            <p>
+                <span class="badge" id="detail-status-badge"></span>
+            </p>
+            <label>
+                Description
+                <textarea id="detail-description" rows="3"></textarea>
+            </label>
+            <label>
+                Owner
+                <select id="detail-owner"></select>
+            </label>
+            <p class="muted">
+                Created: <span id="detail-created"></span> &middot;
+                Updated: <span id="detail-updated"></span>
+            </p>
+            <h3>Status History</h3>
+            <table id="detail-history-table">
+                <thead>
+                    <tr>
+                        <th>Previous</th>
+                        <th>New</th>
+                        <th>Changed</th>
+                    </tr>
+                </thead>
+                <tbody id="detail-history-body"></tbody>
+            </table>
+            <div class="modal-actions">
+                <button type="button" class="secondary" id="detail-close-btn">Close</button>
+                <button type="button" id="save-changes-btn" data-testid="save-changes-btn" disabled>Save Changes</button>
+            </div>
+        </div>
+    </div>
 
     <script src="/js/app.js"></script>
 </body>

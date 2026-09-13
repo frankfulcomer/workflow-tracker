@@ -1,7 +1,9 @@
 package com.example.tracker.controller;
 
+import com.example.tracker.dto.WorkItemRequest;
 import com.example.tracker.model.Status;
 import com.example.tracker.model.WorkItem;
+import com.example.tracker.service.OwnerNotFoundException;
 import com.example.tracker.service.WorkItemService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -41,15 +43,21 @@ public class WorkItemController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkItem> create(@Valid @RequestBody WorkItem item) {
-        WorkItem saved = service.create(item);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    public ResponseEntity<?> create(@Valid @RequestBody WorkItemRequest request) {
+        try {
+            WorkItem saved = service.create(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        } catch (OwnerNotFoundException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<WorkItem> update(@PathVariable Long id, @Valid @RequestBody WorkItem item) {
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody WorkItemRequest request) {
         try {
-            return ResponseEntity.ok(service.update(id, item));
+            return ResponseEntity.ok(service.update(id, request));
+        } catch (OwnerNotFoundException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
@@ -64,6 +72,18 @@ public class WorkItemController {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (IllegalStateException e) {
             return ResponseEntity.unprocessableEntity().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PatchMapping("/{id}/owner")
+    public ResponseEntity<?> updateOwner(@PathVariable Long id, @RequestBody Map<String, Long> body) {
+        try {
+            Long ownerId = body.get("ownerId");
+            return ResponseEntity.ok(service.changeOwner(id, ownerId));
+        } catch (OwnerNotFoundException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
