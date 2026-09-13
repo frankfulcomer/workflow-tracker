@@ -22,6 +22,7 @@ As a user, I want to assign a work item to an owner so that responsibility for t
 - **AC-6:** A work item may be changed from assigned to unassigned.
 - **AC-7:** When a work item is created, the system records its creation timestamp.
 - **AC-8:** When a work item is modified, the system records the timestamp of the most recent modification.
+- **AC-9:** A work item that has no assigned owner has no stored owner relationship.
 
 ---
 

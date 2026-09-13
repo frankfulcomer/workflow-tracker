@@ -36,11 +36,12 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
-        <!-- Default, zero-setup DB for local dev / CI -->
+        <!-- Default, zero-setup DB for local dev / CI. Compile scope (not
+             runtime) because H2TcpServerConfig references org.h2.tools.Server
+             directly for the opt-in "sql-verify" profile. -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>runtime</scope>
         </dependency>
 
         <!-- Optional: real Oracle DB, used only when -Dspring.profiles.active=oracle -->
