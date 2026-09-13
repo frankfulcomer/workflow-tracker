@@ -145,7 +145,7 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: upp
     max-width: 600px;
 }
 
-.modal-actions {
+.action-area {
     margin-top: 20px;
     padding-top: 16px;
     border-top: 1px solid var(--border);
@@ -154,7 +154,17 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: upp
     gap: 8px;
 }
 
-/* Detail view only - the New Item form's description textarea is unaffected. */
-#detail-description {
+.action-area button {
+    padding: 9px 16px;
+    font-size: inherit;
+    border: 1px solid transparent;
+}
+
+.action-area .secondary {
+    border-color: var(--accent);
+}
+
+#detail-description,
+#description {
     resize: none;
 }

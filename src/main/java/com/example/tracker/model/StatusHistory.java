@@ -20,8 +20,10 @@ public class StatusHistory {
     @JoinColumn(name = "work_item_id", nullable = false)
     private WorkItem workItem;
 
+    // Null for the initial history record created at work-item creation (WF-003 AC-7),
+    // since there is no prior status to record.
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private Status previousStatus;
 
     @Enumerated(EnumType.STRING)

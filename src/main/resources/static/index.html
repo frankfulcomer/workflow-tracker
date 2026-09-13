@@ -30,8 +30,10 @@
                     Description
                     <textarea id="description" name="description" rows="3" maxlength="2000"></textarea>
                 </label>
-                <button type="submit">Create</button>
                 <span id="create-error" class="error"></span>
+                <div class="action-area">
+                    <button type="submit" id="create-btn" data-testid="create-btn" disabled>Create</button>
+                </div>
             </form>
         </section>
 
@@ -97,7 +99,7 @@
                 </thead>
                 <tbody id="detail-history-body"></tbody>
             </table>
-            <div class="modal-actions">
+            <div class="action-area">
                 <button type="button" class="secondary" id="detail-close-btn">Close</button>
                 <button type="button" id="save-changes-btn" data-testid="save-changes-btn" disabled>Save Changes</button>
             </div>

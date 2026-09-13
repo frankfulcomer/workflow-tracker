@@ -4,6 +4,8 @@ These lightweight Agile-style user stories and acceptance criteria define the be
 
 They are intended to provide a shared basis for development, manual testing, and automated regression testing.
 
+User-interface behavior defined by these stories follows the shared conventions in `docs/ux-conventions.md` unless a story explicitly specifies otherwise.
+
 ## WF-001 — Assign an Owner to a Work Item
 
 ### User Story
@@ -71,7 +73,7 @@ As a user, I want to see the history of status changes so that I can understand 
 - **AC-4:** Rejected status transitions do not create history records.
 - **AC-5:** Existing status history is preserved when a work item is reopened.
 - **AC-6:** Status history is displayed on the work-item detail view.
-- **AC-7:** Creating a work item does not create a status-history record. Status history begins with the first successful change from the initial `NEW` status.
+- **AC-7:** Creating a work item creates an initial status-history record showing that the work item entered NEW status at the time of creation.
 
 ---
 
@@ -114,10 +116,31 @@ As a user, I want to review and save changes to a work item as a single edit so 
 
 ---
 
+## WF-006 — Create a Work Item
+
+### User Story
+
+As a user, I want to create a work item with its initial details so that new work can be recorded and tracked.
+
+### Acceptance Criteria
+
+- **AC-1:** A work item requires a nonblank title.
+- **AC-2:** A work item may be created with or without a description.
+- **AC-3:** A work item may be created with an existing owner or left unassigned.
+- **AC-4:** The Create action is disabled until a nonblank title has been entered.
+- **AC-5:** Selecting Create with valid input creates one work item using the entered title, description, and owner.
+- **AC-6:** A successfully created work item starts in `NEW` status.
+- **AC-7:** A successfully created work item appears in the work-item list.
+- **AC-8:** After successful creation, the creation form is reset to its initial state and the Create action becomes disabled again.
+- **AC-9:** If creation fails, the entered form values remain available so that the user does not have to re-enter them.
+- **AC-10:** If creation fails, the user is informed that the work item was not created.
+
+---
+
 ## Scope Notes
 
 - Owners are predefined for this increment; creating, editing, or deleting owners is out of scope.
-- Owner assignment, status lifecycle, status history, description editing, and work-item edit/save behavior are the focus of this increment.
+- Owner assignment, work-item creation, status lifecycle, status history, description editing, and work-item edit/save behavior are the focus of this increment.
 - Existing search and filtering behavior remains unchanged.
 - Authentication, roles and permissions, comments, notifications, reporting dashboards, and other product features are out of scope.
 
@@ -129,4 +152,4 @@ As a user, I want to review and save changes to a work item as a single edit so 
 - Add persistent left-side navigation.
 - Add pagination with selectable items per page.
 - Consider owner create/edit/delete functionality in a future increment.
-- Refine the New Item form, including consistent bottom-right action placement and creation behavior.
+- Standardize table row actions — Update the View and Delete buttons to follow the shared UX conventions and visual language used by other application actions, while preserving appropriate distinction between normal and destructive actions.

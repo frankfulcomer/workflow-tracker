@@ -4,6 +4,8 @@ const createError = document.getElementById('create-error');
 const searchBox = document.getElementById('search-box');
 const statusFilter = document.getElementById('status-filter');
 const ownerSelect = document.getElementById('owner');
+const titleInput = document.getElementById('title');
+const createBtn = document.getElementById('create-btn');
 
 const detailModal = document.getElementById('item-detail-modal');
 const detailTitle = document.getElementById('detail-title');
@@ -150,7 +152,7 @@ function populateDetailModal(item) {
     for (const entry of item.statusHistory) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${entry.previousStatus.replace('_', ' ')}</td>
+            <td>${entry.previousStatus ? entry.previousStatus.replace('_', ' ') : ''}</td>
             <td>${entry.newStatus.replace('_', ' ')}</td>
             <td>${formatDate(entry.changedAt)}</td>
         `;
@@ -218,12 +220,25 @@ detailDescription.addEventListener('input', updateSaveButtonState);
 detailCloseBtn.addEventListener('click', closeDetail);
 saveChangesBtn.addEventListener('click', saveChanges);
 
+function updateCreateButtonState() {
+    createBtn.disabled = titleInput.value.trim().length === 0;
+}
+
+titleInput.addEventListener('input', updateCreateButtonState);
+updateCreateButtonState();
+
 createForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    const title = titleInput.value.trim();
+    if (!title) {
+        return;
+    }
+
     createError.textContent = '';
 
     const payload = {
-        title: document.getElementById('title').value.trim(),
+        title,
         ownerId: ownerSelect.value ? Number(ownerSelect.value) : null,
         description: document.getElementById('description').value.trim()
     };
@@ -236,9 +251,10 @@ createForm.addEventListener('submit', async (e) => {
 
     if (res.ok) {
         createForm.reset();
+        updateCreateButtonState();
         fetchItems();
     } else {
-        createError.textContent = 'Could not create item - check the title.';
+        createError.textContent = 'Could not create work item.';
     }
 });
 

@@ -58,6 +58,7 @@ public class WorkItemService {
         return repository.findById(id);
     }
 
+    @Transactional
     public WorkItem create(WorkItemRequest request) {
         WorkItem item = new WorkItem();
         item.setTitle(request.getTitle());
@@ -66,7 +67,10 @@ public class WorkItemService {
         // A newly created work item always starts in NEW - no client-supplied status
         // can bypass the state machine at creation time.
         item.setStatus(Status.NEW);
-        return repository.save(item);
+        WorkItem saved = repository.save(item);
+        // WF-003 AC-7: creation itself records entry into NEW, with no previous status.
+        recordHistory(saved, null, Status.NEW);
+        return saved;
     }
 
     /**
@@ -93,14 +97,21 @@ public class WorkItemService {
 
         item.setStatus(newStatus);
         WorkItem saved = repository.save(item);
-
-        StatusHistory history = new StatusHistory();
-        history.setWorkItem(saved);
-        history.setPreviousStatus(currentStatus);
-        history.setNewStatus(newStatus);
-        statusHistoryRepository.save(history);
+        recordHistory(saved, currentStatus, newStatus);
 
         return saved;
+    }
+
+    private void recordHistory(WorkItem item, Status previousStatus, Status newStatus) {
+        StatusHistory history = new StatusHistory();
+        history.setWorkItem(item);
+        history.setPreviousStatus(previousStatus);
+        history.setNewStatus(newStatus);
+        StatusHistory saved = statusHistoryRepository.save(history);
+        // Keep the in-memory collection in sync so the caller's response (e.g. the
+        // WorkItem returned from create()) reflects the record that was just persisted,
+        // rather than relying on a lazy reload that a brand-new entity never triggers.
+        item.getStatusHistory().add(saved);
     }
 
     public WorkItem update(Long id, WorkItemRequest request) {
